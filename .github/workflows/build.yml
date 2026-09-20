@@ -23,6 +23,8 @@ jobs:
     steps:
       - uses: actions-rust-lang/setup-rust-toolchain@v2
       - uses: swatinem/rust-cache@v2
+        with:
+          cache-directories: target/
       - uses: actions/setup-node@v7
       - uses: actions/checkout@v5
       - uses: actions/checkout@v5
@@ -54,5 +56,5 @@ jobs:
       - run: |
           cargo install tauri-cli
           (cd save_point && cargo build --release)
-          (cd save_point_gui && cargo tauri build --no-sign)
+          (cd save_point_gui && npm i && cargo tauri build --no-sign)
           ls ./target/release/
