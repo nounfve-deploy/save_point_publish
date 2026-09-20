@@ -1,0 +1,58 @@
+name: build
+
+on:
+  workflow_dispatch:
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - platform: ubuntu-latest
+          # - platform: windows-latest
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions-rust-lang/setup-rust-toolchain@v2
+      - uses: swatinem/rust-cache@v2
+      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: nounfve/save_point
+          token: ${{ secrets.PULL_TOKEN }}
+          path: save_point
+      - uses: actions/checkout@v5
+        with:
+          repository: nounfve/save_point_gui
+          token: ${{ secrets.PULL_TOKEN }}
+          path: save_point_gui
+
+      - name: Install Ubuntu-specific packages
+        if: startsWith(matrix.platform, 'ubuntu')
+        run: >
+          sudo apt-get update &&
+          sudo apt-get install -y 
+          libwebkit2gtk-4.1-dev 
+          build-essential 
+          curl 
+          wget 
+          file 
+          libxdo-dev 
+          libssl-dev 
+          libayatana-appindicator3-dev 
+          librsvg2-dev
+      
+      - run: |
+          cargo install tauri-cli
+          (cd save_point && cargo build --release)
+          (cd save_point_gui && cargo tauri build --no-sign)
+          ls ./target/release/
