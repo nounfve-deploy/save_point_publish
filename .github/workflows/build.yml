@@ -37,6 +37,11 @@ jobs:
           repository: nounfve/save_point_gui
           token: ${{ secrets.PULL_TOKEN }}
           path: save_point_gui
+      - uses: actions/checkout@v5
+        with:
+          repository: nounfve/utoken
+          token: ${{ secrets.PULL_TOKEN }}
+          path: utoken
 
       - name: Install Ubuntu-specific packages
         if: startsWith(matrix.platform, 'ubuntu')
