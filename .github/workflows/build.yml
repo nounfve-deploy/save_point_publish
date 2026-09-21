@@ -89,7 +89,8 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           name: save_point-${{ github.sha }}
+          tag_name: dev
           files: ./*.zip
           prerelease: true
-          draft: true
+          draft: false
           overwrite_files: true
