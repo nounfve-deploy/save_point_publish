@@ -92,3 +92,4 @@ jobs:
           files: ./*.zip
           prerelease: true
           draft: true
+          overwrite_files: true
