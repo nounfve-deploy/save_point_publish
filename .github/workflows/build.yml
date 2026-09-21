@@ -18,8 +18,9 @@ jobs:
         include:
           - platform: ubuntu-latest
           # - platform: windows-latest
-
     runs-on: ${{ matrix.platform }}
+    env:
+      CARGO_TARGET_DIR: ${{ github.workspace }}/target
     steps:
       - uses: actions-rust-lang/setup-rust-toolchain@v2
       - uses: swatinem/rust-cache@v2
@@ -57,9 +58,9 @@ jobs:
           libssl-dev 
           libayatana-appindicator3-dev 
           librsvg2-dev
-      
+
       - run: |
           cargo install tauri-cli
           (cd save_point && cargo build --release)
-          (cd save_point_gui && npm i && cargo tauri build --no-sign)
+          (cd save_point_gui && npm i && cargo tauri build --no-sign --bundles none)
           ls ./target/release/
