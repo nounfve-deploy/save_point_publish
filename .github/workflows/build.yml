@@ -43,10 +43,10 @@ jobs:
       - uses: taiki-e/cache-cargo-install-action@v3
         with:
           tool: tauri-cli
-      - uses: swatinem/rust-cache@v2
+      - uses: actions/cache@v6
         with:
-          cache-directories: target/
-
+          path: target/
+          key: save_point_cache-${{ matrix.platform }}
       - name: Install Ubuntu-specific packages
         if: startsWith(matrix.platform, 'ubuntu')
         run: >
@@ -66,7 +66,7 @@ jobs:
           cd save_point && cargo build --release
           cd ..
           cd save_point_gui && npm i && cargo tauri build --no-sign
-      - uses: actions/upload-artifact@v8
+      - uses: actions/upload-artifact@v7
         with:
           name: save_point-${{ matrix.platform }}
           path: |
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v7
       - name: Zip All Artifacts
         run: |
           for dir in */;            
