@@ -17,7 +17,7 @@ jobs:
       matrix:
         include:
           - platform: ubuntu-latest
-          # - platform: windows-latest
+          - platform: windows-latest
     runs-on: ${{ matrix.platform }}
     env:
       CARGO_TARGET_DIR: ${{ github.workspace }}/target
@@ -68,3 +68,28 @@ jobs:
           (cd save_point && cargo build --release)
           (cd save_point_gui && npm i && cargo tauri build --no-sign)
           ls ./target/release/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: save_point-${{ matrix.platform }}
+          path: |
+            target/release/save_point
+            target/release/save_point.exe
+            target/release/sp-manager
+            target/release/sp-manager.exe
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+      - name: Zip All Artifacts
+        run: |
+          for dir in */;            
+          do (cd "${dir}" && zip -r "../${dir%/}.zip" ".");
+          done
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          name: save_point-${{ github.sha }}
+          files: ./*.zip
+          prerelease: true
