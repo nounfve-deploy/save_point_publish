@@ -66,6 +66,8 @@ jobs:
           cd save_point && cargo build --release
           cd ..
           cd save_point_gui && npm i && cargo tauri build --no-sign
+          cd ..
+          cd mirror_finder && cargo build --release
       - uses: actions/upload-artifact@v7
         with:
           name: save_point-${{ matrix.platform }}
@@ -74,6 +76,8 @@ jobs:
             target/release/save_point.exe
             target/release/sp-manager
             target/release/sp-manager.exe
+            target/release/mirror_finder
+            target/release/mirror_finder.exe
   release:
     needs: build
     runs-on: ubuntu-latest
