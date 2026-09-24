@@ -63,21 +63,23 @@ jobs:
           librsvg2-dev
       # build
       - run: |
-          cd save_point && cargo build --release
-          cd ..
-          cd save_point_gui && npm i && cargo tauri build --no-sign
-          cd ..
-          cd mirror_finder && cargo build --release
+          (cd save_point && cargo build --release)
+          (cd save_point_gui && npm i && cargo tauri build --no-sign)
+          (cd mirror_finder && cargo build --release)
+        shell: bash
+      - run: |
+          mkdir -p xbin
+          cp target/release/{save_point*,sp-manager*,mirror_finder*} xbin/
+          rm -f ./xbin/{*.d,*.pdb}
+          mkdir -p xbin.init
+          cp xbin/mirror_finder* ./xbin.init
+          ./xbin/save_point embed copy -f 'xbin.init/*' xbin/save_point.embed
+          ./xbin/save_point.embed embed list
+        shell: bash
       - uses: actions/upload-artifact@v7
         with:
           name: save_point-${{ matrix.platform }}
-          path: |
-            target/release/save_point
-            target/release/save_point.exe
-            target/release/sp-manager
-            target/release/sp-manager.exe
-            target/release/mirror_finder
-            target/release/mirror_finder.exe
+          path: xbin/*
   release:
     needs: build
     runs-on: ubuntu-latest
