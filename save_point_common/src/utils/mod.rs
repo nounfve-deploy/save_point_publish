@@ -1,8 +1,7 @@
 pub mod path_impl;
 
-
-pub mod external{
-    // re export
+/// re export
+pub mod external {
+    pub use sutils::boilerplates::tokio_rt_singleton;
     pub use sutils::macros::command;
-
 }
