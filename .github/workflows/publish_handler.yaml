@@ -1,0 +1,30 @@
+name: Publish Handler
+
+on:
+  issues:
+    types: [opened, reopened]
+env:
+  ISSUE_TOKEN: 11AU75M2Q0fV7rJXLbOW1w_NJ0bkhwWXBJHR52as9Shj0Y1b36XULwojaPo8v67ehARL24IJWO0UiXHD5X
+jobs:
+  handle_publish:
+    if: contains(github.event.issue.labels.*.name, 'publish')
+
+    runs-on: ubuntu-latest
+    env:
+      URL: ${{ github.event.issue.title }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          repository: nounfve-deploy/save_point_publish
+          ref: publish
+      - run: |
+          set -u 
+          export REPO=$(echo $URL|grep -oP 'https://github.com/\K.*?(?=/releases/tag/.*)')
+          export TAG=$(echo $URL|grep -oP '.*?/releases/tag/\K.+')
+          gh release download $TAG --repo $REPO
+          ls -al
+      - run: >
+          gh issue close ${{ github.event.issue.number }} 
+          --comment "Processing completed"
+        env:
+          GH_TOKEN: github_pat_${{ env.ISSUE_TOKEN }}
