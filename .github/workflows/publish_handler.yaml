@@ -17,7 +17,7 @@ jobs:
         with:
           repository: nounfve-deploy/save_point_publish
           ref: publish
-      - uses: nounfve-deploy/save_point_publish/.github/actions/my-composite-action@master
+      - uses: nounfve-deploy/save_point_publish/.github/use_sp@master
       - run: |
           set -u 
           export REPO=$(echo $URL|grep -oP 'https://github.com/\K.*?(?=/releases/tag/.*)')
