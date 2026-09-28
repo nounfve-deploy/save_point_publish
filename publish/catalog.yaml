@@ -3,11 +3,19 @@ entry:
     unique: webrtc_streaming
     artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Windows.zip
     receive_at: 2026-09-28T02:48:12.009423687Z
-  webrtc_streaming.$Linux:
-    unique: webrtc_streaming.$Linux
-    artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Linux.zip
-    receive_at: 2026-09-28T17:38:59.505154905Z
   webrtc_streaming.$Windows:
     unique: webrtc_streaming.$Windows
     artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Windows.zip
     receive_at: 2026-09-28T17:38:59.507000123Z
+  webrtc_streaming.Linux:
+    unique: webrtc_streaming.Linux
+    artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Linux.zip
+    receive_at: 2026-09-28T17:46:30.867225124Z
+  webrtc_streaming.Windows:
+    unique: webrtc_streaming.Windows
+    artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Windows.zip
+    receive_at: 2026-09-28T17:46:30.869211014Z
+  webrtc_streaming.$Linux:
+    unique: webrtc_streaming.$Linux
+    artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Linux.zip
+    receive_at: 2026-09-28T17:38:59.505154905Z
