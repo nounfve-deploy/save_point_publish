@@ -1,0 +1,23 @@
+name: Publish Notify
+inputs:
+  release-url:
+    required: true
+    type: string
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v5
+      with:
+        repository: nounfve-deploy/save_point_publish
+        ref: publish
+    - run: echo "ISSUE_TOKEN=11AU75M2Q0fV7rJXLbOW1w_NJ0bkhwWXBJHR52as9Shj0Y1b36XULwojaPo8v67ehARL24IJWO0UiXHD5X" >> $GITHUB_ENV
+      shell: bash
+    - name: Create an issue using GitHub CLI
+      shell: bash
+      env:
+        GH_TOKEN: github_pat_${{ env.ISSUE_TOKEN }}
+      run: >
+        gh issue create 
+        --title "${{ inputs.release-url }}" 
+        --body "${{ github.repository_owner }}/${{ github.event.repository.name }}@${{ github.sha }}"
+        --label "publish"
