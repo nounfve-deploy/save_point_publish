@@ -2,11 +2,10 @@ name: install save_point cli
 runs:
   using: composite
   steps:
-    - working-directory: ${{ env.HOME }}
-      shell: bash
+    - shell: bash
       run: |
-        export OS_TAG=$(if [ ${{ runner.os }} = "Linux" ]; then echo "ubuntu-latest"; else echo "windows-latest"; fi)
-        curl -sSL https://github.com/nounfve-deploy/save_point_publish/releases/download/dev/save_point-${OS_TAG}.zip -o save_point.zip
+        cd ${{ env.HOME }}
+        curl -sSL https://github.com/nounfve-deploy/save_point_publish/releases/download/dev/save_point-${{ runner.os }}.zip -o save_point.zip
         unzip save_point.zip && chmod +x ./save_point
         mkdir -p ~/.local/bin/
         realpath ~/.local/bin/ >> $GITHUB_PATH

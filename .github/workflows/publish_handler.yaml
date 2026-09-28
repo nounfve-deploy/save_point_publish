@@ -3,8 +3,9 @@ name: Publish Handler
 on:
   issues:
     types: [opened, reopened]
-env:
-  ISSUE_TOKEN: 11AU75M2Q0fV7rJXLbOW1w_NJ0bkhwWXBJHR52as9Shj0Y1b36XULwojaPo8v67ehARL24IJWO0UiXHD5X
+permissions:
+  contents: write
+  issues: write
 jobs:
   handle_publish:
     if: contains(github.event.issue.labels.*.name, 'publish')
@@ -23,9 +24,15 @@ jobs:
           export REPO=$(echo $URL|grep -oP 'https://github.com/\K.*?(?=/releases/tag/.*)')
           export TAG=$(echo $URL|grep -oP '.*?/releases/tag/\K.+')
           gh release download $TAG --repo $REPO
-          ls -al
+          for zip in *.zip;            
+          do save_point catalog add $zip --url "https://github.com/${REPO}/releases/download/${TAG}/${zip}" --use publish/catalog.yaml;
+          done
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update catalog"
+          file_pattern: "publish/**"
       - run: >
           gh issue close ${{ github.event.issue.number }} 
           --comment "Processing completed"
         env:
-          GH_TOKEN: github_pat_${{ env.ISSUE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
