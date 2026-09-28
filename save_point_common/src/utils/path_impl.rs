@@ -5,6 +5,7 @@ pub trait PathImpls {
     fn ensure_parent(self) -> Self;
     fn ensure_executable(self) -> std::io::Result<PathBuf>;
     fn ensure_nonexist(self) -> Self;
+    fn check_exist(self) -> std::io::Result<PathBuf>;
 }
 
 impl PathImpls for PathBuf {
@@ -51,5 +52,15 @@ impl PathImpls for PathBuf {
             fs::remove_file(&self).unwrap();
         }
         self
+    }
+
+    fn check_exist(self) -> std::io::Result<Self> {
+        if !self.exists() {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                self.to_string_lossy(),
+            ));
+        }
+        Ok(self)
     }
 }
