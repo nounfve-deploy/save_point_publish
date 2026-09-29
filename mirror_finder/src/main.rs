@@ -2,6 +2,7 @@ use std::time::Duration;
 
 use anyhow::anyhow;
 use futures_util::StreamExt;
+use save_point_common::types::config::{Config, UrLRewrite};
 use tokio::fs;
 
 #[tokio::main]
@@ -21,14 +22,30 @@ async fn main() {
     if winner.is_empty() {
         return;
     }
-    let config = CONFIG_TEMPLATE.replace("{__winner__}", winner);
-    fs::write("config.global.yaml", config).await.unwrap();
+
+    let mut url_rewrite = vec![];
+    {
+        url_rewrite.push(UrLRewrite {
+            org: format!("{GITHUB}"),
+            new: format!("{winner}{GITHUB}"),
+        });
+        url_rewrite.push(UrLRewrite {
+            org: format!("{GITHUB_CONTENT}"),
+            new: format!("{winner}{GITHUB_CONTENT}"),
+        });
+    }
+
+    let config = Config { url_rewrite };
+    fs::write(
+        "config.global.yaml",
+        serde_yaml::to_string(&config).unwrap(),
+    )
+    .await
+    .unwrap();
 }
 
-const CONFIG_TEMPLATE: &str = r#"url_rewrite:
-  - org: https://github.com/
-    new: {__winner__}https://github.com/
-"#;
+const GITHUB: &str = "https://github.com/";
+const GITHUB_CONTENT: &str = "https://raw.githubusercontent.com/";
 
 const TIMEOUT_TAG: &str = "!timeout!";
 const TEST_LINK: &str = "https://github.com/microsoft/vscode/archive/refs/tags/1.138.0.zip";

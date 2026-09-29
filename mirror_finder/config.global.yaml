@@ -1,3 +1,0 @@
-url_rewrite:
-  - org: https://github.com/
-    new: https://ghproxy.imciel.com/https://github.com/
