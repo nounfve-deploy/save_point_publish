@@ -88,18 +88,17 @@ jobs:
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v7
-      - name: Zip All Artifacts
-        run: |
-          mkdir -p upload
-          for dir in */;            
-          do (cd ${dir} && mv ./* ../upload/);
-          done
-      - name: Release
-        uses: softprops/action-gh-release@v3
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v3
+        id: release
         with:
           name: save_point-${{ github.sha }}
           tag_name: dev
-          files: ./upload/*
+          files: ./*
           prerelease: true
           draft: false
           overwrite_files: true
+      - uses: nounfve-deploy/save_point_publish/.github/publish_notify@master
+        with:
+          release-url: ${{ steps.release.outputs.url }}
