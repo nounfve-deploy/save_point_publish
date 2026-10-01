@@ -1,0 +1,6 @@
+dir_name: package.dir
+mod_time: 2026-10-01T17:45:45.453416881Z
+sum_blake3: dba5865c0d91b17958e4d2cac98c338f85cbbda07b71a020ab16c391b5e7af4b
+export:
+  xbin:
+  - xbin/alacritty

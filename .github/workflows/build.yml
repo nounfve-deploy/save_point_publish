@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: write
@@ -68,18 +69,19 @@ jobs:
           (cd mirror_finder && cargo build --release)
         shell: bash
       - run: |
-          mkdir -p xbin
-          cp target/release/{save_point*,sp-manager*,mirror_finder*} xbin/
-          rm -f ./xbin/{*.d,*.pdb}
+          cp target/release/{save_point*,sp-manager*,mirror_finder*} package.dir/
+          rm -f ./package.dir/{*.d,*.pdb}
           mkdir -p xbin.init
-          cp xbin/mirror_finder* ./xbin.init
-          ./xbin/save_point embed copy -f 'xbin.init/*' xbin/save_point.embed
-          ./xbin/save_point.embed embed list
+          cp package.dir/mirror_finder* ./xbin.init
+          ./package.dir/save_point embed copy -f 'xbin.init/*' package.dir/save_point.embed
+          cd package.dir/
+          ./save_point archive create
+          ./save_point archive export save_point.${{ runner.os }}.zip
         shell: bash
       - uses: actions/upload-artifact@v7
         with:
           name: save_point-${{ runner.os }}
-          path: xbin/*
+          path: package.dir/save_point*
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -88,15 +90,16 @@ jobs:
         uses: actions/download-artifact@v7
       - name: Zip All Artifacts
         run: |
+          mkdir -p upload
           for dir in */;            
-          do (cd "${dir}" && zip -r "../${dir%/}.zip" ".");
+          do (cd ${dir} && mv ./* ../upload/);
           done
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
           name: save_point-${{ github.sha }}
           tag_name: dev
-          files: ./*.zip
+          files: ./upload/*
           prerelease: true
           draft: false
           overwrite_files: true

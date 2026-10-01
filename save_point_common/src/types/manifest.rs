@@ -16,6 +16,10 @@ pub struct Manifest<F = ()> {
     #[serde(default)]
     pub exec: ExecInfo,
 
+    #[serde(skip_serializing_if = "Export::is_empty")]
+    #[serde(default)]
+    pub export: Export,
+
     #[serde(skip_serializing_if = "Vec::is_empty")]
     #[serde(default)]
     pub ignore: Vec<String>,
@@ -67,6 +71,19 @@ pub struct ExecInfo {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     #[serde(default)]
     pub args: Vec<String>,
+}
+
+#[derive(Debug, Default, serde::Serialize, serde::Deserialize)]
+pub struct Export {
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[serde(default)]
+    pub xbin: Vec<String>,
+}
+
+impl Export {
+    pub fn is_empty(&self) -> bool {
+        self.xbin.is_empty()
+    }
 }
 
 impl ExecInfo {

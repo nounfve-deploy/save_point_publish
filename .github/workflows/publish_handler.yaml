@@ -3,6 +3,9 @@ name: Publish Handler
 on:
   issues:
     types: [opened, reopened]
+concurrency:
+  group: catalog-${{ github.ref }}
+  cancel-in-progress: false
 permissions:
   contents: write
   issues: write
