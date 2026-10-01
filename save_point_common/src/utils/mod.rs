@@ -1,3 +1,4 @@
+pub mod fatal;
 pub mod path_impl;
 
 /// re export

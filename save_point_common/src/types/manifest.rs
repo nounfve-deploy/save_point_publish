@@ -33,6 +33,7 @@ pub struct Manifest<F = ()> {
 
 pub type Blake3Hash = ArrayString<{ 2 * blake3::OUT_LEN }>;
 pub type FileListOrdered = BTreeMap<PathBuf, FileInfo>;
+pub type ListOutput = BTreeMap<PathBuf, VecDeque<Manifest<FileListOrdered>>>;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct FileInfo {
@@ -111,7 +112,10 @@ pub struct SipBuild {
     pub desc_template: Description,
 }
 
-use std::{collections::BTreeMap, path::PathBuf};
+use std::{
+    collections::{BTreeMap, VecDeque},
+    path::PathBuf,
+};
 
 use arrayvec::ArrayString;
 use chrono::{DateTime, Utc};

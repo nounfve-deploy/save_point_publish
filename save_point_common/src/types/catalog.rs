@@ -19,4 +19,5 @@ pub struct CatalogItem {
 
 impl Catalog {
     pub const FILE_NAME: &str = "catalog.yaml";
+    pub const URI_SCHEME: &str = "catalog.sp";
 }
