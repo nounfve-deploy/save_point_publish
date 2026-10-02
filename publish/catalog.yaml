@@ -3,11 +3,19 @@ entry:
     unique: webrtc_streaming.Linux
     artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Linux.zip
     receive_at: 2026-09-29T13:04:17.545456429Z
-  webrtc_streaming.Windows:
-    unique: webrtc_streaming.Windows
-    artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Windows.zip
-    receive_at: 2026-09-29T13:04:17.547397822Z
   save_point:
     unique: save_point
     artifact: https://github.com/nounfve-deploy/save_point_publish/releases/download/dev/save_point.Windows.zip
     receive_at: 2026-10-01T20:06:21.366666132Z
+  save_point.Linux:
+    unique: save_point.Linux
+    artifact: https://github.com/nounfve-deploy/save_point_publish/releases/download/dev/save_point.Linux.zip
+    receive_at: 2026-10-02T22:42:54.304267540Z
+  save_point.Windows:
+    unique: save_point.Windows
+    artifact: https://github.com/nounfve-deploy/save_point_publish/releases/download/dev/save_point.Windows.zip
+    receive_at: 2026-10-02T22:42:54.305813536Z
+  webrtc_streaming.Windows:
+    unique: webrtc_streaming.Windows
+    artifact: https://github.com/nounfve-deploy/flobro-inject/releases/download/dev/webrtc_streaming.Windows.zip
+    receive_at: 2026-09-29T13:04:17.547397822Z
