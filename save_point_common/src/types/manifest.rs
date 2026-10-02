@@ -54,6 +54,7 @@ pub struct FileInfo {
 pub enum FileType {
     File,
     Dir,
+    Symlink(PathBuf),
     Extern(PathBuf),
 }
 
