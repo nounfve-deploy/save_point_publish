@@ -89,7 +89,9 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: save_point-${{ runner.os }}
-          path: package.dir/save_point*
+          path: |
+            package.dir/save_point.embed*
+            package.dir/*.zip
   release:
     needs: build
     runs-on: ubuntu-latest
