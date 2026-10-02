@@ -63,6 +63,14 @@ jobs:
           libayatana-appindicator3-dev 
           librsvg2-dev
       # build
+      - if: startsWith(matrix.platform, 'ubuntu')
+        run: |
+          ln -sn /usr/bin/gnome-terminal ./package.dir/sp-pty
+        shell: bash
+      - if: runner.os == 'Windows'
+        run: |
+          curl -L -o ./package.dir/sp-pty.exe https://github.com/alacritty/alacritty/releases/download/v0.17.0/Alacritty-v0.17.0-portable.exe
+        shell: bash
       - run: |
           (cd save_point && cargo build --release)
           (cd save_point_gui && npm i && cargo tauri build --no-sign)
