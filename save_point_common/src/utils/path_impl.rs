@@ -39,8 +39,11 @@ impl PathImpls for PathBuf {
             use std::fs;
             use std::os::unix::fs::PermissionsExt;
             let mut perms = fs::metadata(&self)?.permissions();
-            perms.set_mode(perms.mode() | 0o111);
-            fs::set_permissions(&self, perms)?;
+            let executable = perms.mode() | 0o111;
+            if perms.mode() != executable {
+                perms.set_mode(perms.mode() | 0o111);
+                fs::set_permissions(&self, perms)?;
+            }
         }
         Ok(self)
     }
