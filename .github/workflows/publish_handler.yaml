@@ -30,6 +30,8 @@ jobs:
           for zip in *.zip;            
           do save_point catalog add $zip --url "https://github.com/${REPO}/releases/download/${TAG}/${zip}" --use publish/catalog.yaml;
           done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update catalog"
