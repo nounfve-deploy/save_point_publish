@@ -18,7 +18,7 @@ use crate::cmd::Cmd;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let ident = Envar::One().identity.as_ref();
+    let ident = &Envar::One().SP_IDENTITY;
     if ident.is_empty() {
         panic!("no ident provided")
     }

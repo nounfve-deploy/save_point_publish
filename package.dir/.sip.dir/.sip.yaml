@@ -12,3 +12,4 @@ export:
   xbin:
     - sp-pty
     - sp-manager
+    - sp-sync-s3

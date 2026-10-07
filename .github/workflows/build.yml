@@ -75,9 +75,10 @@ jobs:
           (cd save_point && cargo build --release)
           (cd save_point_gui && npm i && cargo tauri build --no-sign)
           (cd mirror_finder && cargo build --release)
+          (cd sp-sync-s3 && cargo build --release)
         shell: bash
       - run: |
-          cp target/release/{save_point*,sp-manager*,mirror_finder*} package.dir/
+          cp target/release/{save_point*,sp-manager*,mirror_finder*,sp-sync-s3*} package.dir/
           rm -f ./package.dir/{*.d,*.pdb}
           mkdir -p xbin.init
           cp package.dir/mirror_finder* ./xbin.init

@@ -1,20 +1,39 @@
-use std::borrow::Cow;
+#![allow(nonstandard_style)]
 
-use sutils::{Singleton, env_or};
+use sutils::{PutInMacro, Singleton, env_or, lazy_const};
 
 #[Singleton]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Envar {
-    pub alt_main: Cow<'static, str>,
-    pub identity: Cow<'static, str>,
+    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(default)]
+    pub ALT_MAIN: String,
+    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(default)]
+    pub SP_IDENTITY: String,
 }
 
-const ALT_MAIN: &str = "main";
-const SP_IDENTITY: &str = "";
+impl Envar {
+    pub const GLOBAL: &str = "env.global.yaml";
+}
+
+#[PutInMacro(lazy_const)]
+pub const ENVAR_DEFAULT: Envar = Envar {
+    ALT_MAIN: "main",
+    SP_IDENTITY: "anonymous",
+};
 
 impl Default for Envar {
     fn default() -> Self {
-        let alt_main = env_or!(ALT_MAIN);
-        let identity = env_or!(SP_IDENTITY);
-        Self { alt_main, identity }
+        let Envar {
+            ALT_MAIN,
+            SP_IDENTITY,
+        } = &*ENVAR_DEFAULT;
+        let ALT_MAIN = env_or!(ALT_MAIN).into_owned();
+        let SP_IDENTITY = env_or!(SP_IDENTITY).into_owned();
+        Self {
+            ALT_MAIN,
+            SP_IDENTITY,
+        }
     }
 }
